@@ -18,6 +18,56 @@ Ideal para proyectos rápidos, microservicios, APIs y sistemas donde prefieres c
 - 📋 Logging centralizado, sin interrupciones por errores
 - 🔁 Compatible con frameworks como **Flask**, **FastAPI**, etc.
 
+## ✅ Tipos de datos admitidos en schem
+
+| `data_type`          | Equivalente PostgreSQL | Observaciones                           |
+| -------------------- | ---------------------- | --------------------------------------- |
+| `"text"`             | `TEXT`                 | Para cadenas de longitud variable       |
+| `"varchar"`          | `VARCHAR(n)`           | Usa junto con `"length": 100`           |
+| `"integer"`          | `INTEGER`              | Para enteros                            |
+| `"serial"`           | `SERIAL`               | Auto-incremental (clave primaria común) |
+| `"boolean"`          | `BOOLEAN`              | Verdadero/Falso                         |
+| `"timestamp"`        | `TIMESTAMP`            | Fechas y horas                          |
+| `"date"`             | `DATE`                 | Solo fecha                              |
+| `"jsonb"`            | `JSONB`                | Estructuras JSON                        |
+| `"float"` / `"real"` | `REAL`                 | Números decimales                       |
+| `"numeric"`          | `NUMERIC`              | Para precisión exacta (moneda, etc.)    |
+
+
+## 📦 Otros parámetros opcionales en el schema
+
+| Clave         | Descripción                                    |
+| ------------- | ---------------------------------------------- |
+| `primary_key` | `True` → lo marca como `PRIMARY KEY`           |
+| `unique`      | `True` → añade `UNIQUE`                        |
+| `nullable`    | `False` → añade `NOT NULL`                     |
+| `default`     | Valor por defecto (`DEFAULT valor`)            |
+| `length`      | Solo para `varchar`, define la longitud máxima |
+| `comment`     | No usado aún, puedes extenderlo                |
+| `foreign_key` | Dict: `{"reference": "otra_tabla(campo)"}`     |
+
+## 📌 Ejemplo simple
+```python
+schema = {
+    "usuarios": {
+        "id": {
+            "data_type": "serial",
+            "primary_key": True
+        },
+        "email": {
+            "data_type": "varchar",
+            "length": 100,
+            "unique": True,
+            "nullable": False
+        },
+        "perfil": {
+            "data_type": "jsonb",
+            "nullable": True
+        }
+    }
+}
+
+```
 ---
 
 ## 📦 Instalación
