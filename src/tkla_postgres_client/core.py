@@ -43,15 +43,17 @@ class PostgresClient:
         try:
             for table, props in query_dict.items():
                 columns = sanitize_column_list(props.get("columns"))
-                where_clause, values = build_where_clause(props.get("conditions", {}))
+                conditions = props.get("conditions", {})
+                where_clause, values = build_where_clause(conditions)
+                where_sql = sql.SQL(" WHERE ") + where_clause if conditions else sql.SQL("")
                 order = sanitize_order_by(props.get("order_by"))
                 limit = sql.SQL(" LIMIT %s") if props.get("limit") else sql.SQL("")
                 limit_val = [props["limit"]] if props.get("limit") else []
 
-                query = sql.SQL("SELECT {fields} FROM {table} WHERE {where}{order}{limit}").format(
+                query = sql.SQL("SELECT {fields} FROM {table}{where}{order}{limit}").format(
                     fields=columns,
                     table=sql.Identifier(table),
-                    where=where_clause,
+                    where=where_sql,
                     order=order,
                     limit=limit
                 )
